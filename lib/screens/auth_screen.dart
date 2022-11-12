@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instagram_clone/constants.dart';
 import 'package:instagram_clone/services/auth_firebase.dart';
+
+import '../widgets/my_button_widget.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -33,87 +36,53 @@ class _AuthScreenState extends State<AuthScreen> {
                 height: 20,
               ),
               TextFormField(
-                controller: _emailText,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (!value!.contains('@')) {
-                    return 'enter valid email address';
-                  }
-                  return null;
-                },
-                decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 12),
-                    constraints: BoxConstraints(
-                      maxHeight: 45,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5.0),
-                      ),
-                    ),
-                    hintText: 'email address'),
-              ),
+                  controller: _emailText,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (!value!.contains('@')) {
+                      return 'enter valid email address';
+                    }
+                    return null;
+                  },
+                  decoration:
+                      textInputDecoration.copyWith(hintText: 'email address')),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
-                obscureText: true,
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.visiblePassword,
-                controller: _passwordText,
-                validator: (value) {
-                  if (value!.length < 8) {
-                    return 'password length must be 7+ characters';
-                  }
-                  return null;
-                },
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 12),
-                  constraints: BoxConstraints(
-                    maxHeight: 45,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.0),
-                    ),
-                  ),
-                  hintText: 'your password',
-                ),
-              ),
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.visiblePassword,
+                  controller: _passwordText,
+                  validator: (value) {
+                    if (value!.length < 8) {
+                      return 'password length must be 7+ characters';
+                    }
+                    return null;
+                  },
+                  decoration:
+                      textInputDecoration.copyWith(hintText: 'your password')),
               const SizedBox(
                 height: 10,
               ),
-              MaterialButton(
-                minWidth: double.infinity,
-                color: Colors.blueAccent,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                height: 45,
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Auth().signInWithEmailAndPassword(
-                        email: _emailText.text.trim(),
-                        password: _passwordText.text.trim(),
-                        context: context);
-                  }
-                },
-                child: const Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              MyButtonWidget(
+                  bgColor: Colors.blueAccent,
+                  text: 'Login',
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Auth().signInWithEmailAndPassword(
+                          email: _emailText.text.trim(),
+                          password: _passwordText.text.trim(),
+                          context: context);
+                    }
+                  }),
               const SizedBox(
                 height: 20,
               ),
-              MaterialButton(
-                elevation: 0,
-                height: 45,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                minWidth: double.infinity,
-                color: Colors.blue,
+              MyButtonWidget(
+                bgColor: Colors.blue,
+                text: 'Signup',
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     Auth().createUserWithEmailAndPassword(
@@ -122,11 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         context: context);
                   }
                 },
-                child: const Text(
-                  'Signup',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              )
             ])),
       ),
     );
