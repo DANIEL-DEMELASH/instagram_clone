@@ -10,7 +10,7 @@ class MyButtonWidget extends StatelessWidget {
 
   final Color bgColor;
   final String text;
-  final Function onPressed;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class MyButtonWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       minWidth: double.infinity,
       color: bgColor,
-      onPressed: () => onPressed,
+      onPressed: onPressed,
       child: Text(
         text,
         style: const TextStyle(color: Colors.white),

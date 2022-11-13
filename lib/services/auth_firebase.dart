@@ -1,4 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class Auth {
@@ -7,6 +13,8 @@ class Auth {
   User? get currentUser => _firebaseAuth.currentUser;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future<void> sendPasswordResetEmail(
       {required String email, required BuildContext context}) async {
@@ -27,6 +35,11 @@ class Auth {
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
     try {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(child: CircularProgressIndicator());
+          });
       if (emailValid) {
         await _firebaseAuth.signInWithEmailAndPassword(
           email: email,
@@ -37,6 +50,7 @@ class Auth {
           content: Text('invalid email address'),
         ));
       }
+      Navigator.canPop(context) ? Navigator.pop(context) : null;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
@@ -47,12 +61,33 @@ class Auth {
   Future<void> createUserWithEmailAndPassword(
       {required String email,
       required String password,
+      required String username,
+      required String fullname,
+      required File photo,
+      required String phoneNumber,
       required BuildContext context}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      String imageUrl = '';
+      final uid = _firebaseAuth.currentUser!.uid;
+      final ref =
+          FirebaseStorage.instance.ref().child('userImages').child('$uid.jpg');
+      await ref.putFile(photo);
+      imageUrl = await ref.getDownloadURL();
+      await users.doc(uid).set({
+        'uid': uid,
+        'name': fullname,
+        'username': username,
+        'email': email,
+        'bio': '',
+        'phoneNumber': phoneNumber,
+        'profileImage': imageUrl,
+        'followers': [],
+        'following': []
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
@@ -62,7 +97,13 @@ class Auth {
 
   Future<void> signOut(context) async {
     try {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const CircularProgressIndicator();
+          });
       await _firebaseAuth.signOut();
+      Navigator.canPop(context) ? Navigator.pop(context) : null;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
