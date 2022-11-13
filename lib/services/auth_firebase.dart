@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import '../models/user.dart' as model;
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -15,6 +16,8 @@ class Auth {
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+  String imageUrl = '';
 
   Future<void> sendPasswordResetEmail(
       {required String email, required BuildContext context}) async {
@@ -71,23 +74,25 @@ class Auth {
         email: email,
         password: password,
       );
-      String imageUrl = '';
+
       final uid = _firebaseAuth.currentUser!.uid;
       final ref =
           FirebaseStorage.instance.ref().child('userImages').child('$uid.jpg');
       await ref.putFile(photo);
       imageUrl = await ref.getDownloadURL();
-      await users.doc(uid).set({
-        'uid': uid,
-        'name': fullname,
-        'username': username,
-        'email': email,
-        'bio': '',
-        'phoneNumber': phoneNumber,
-        'profileImage': imageUrl,
-        'followers': [],
-        'following': []
-      });
+
+      model.UserModel user = model.UserModel(
+          username: username,
+          uid: uid,
+          email: email,
+          bio: '',
+          profileImage: imageUrl,
+          name: fullname,
+          phoneNumber: phoneNumber,
+          followers: [],
+          following: []);
+
+      await users.doc(uid).set(user.toJson());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),

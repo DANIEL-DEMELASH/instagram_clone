@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/screens/auth_screen.dart';
 import 'package:instagram_clone/screens/home_screen.dart';
 import 'package:instagram_clone/services/auth_firebase.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +17,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Instagram Clone',
-        home: Root());
+        home: ChangeNotifierProvider(
+            create: (context) => UserProvider(), child: const Root()));
   }
 }
 
