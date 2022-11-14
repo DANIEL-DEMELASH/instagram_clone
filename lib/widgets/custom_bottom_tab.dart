@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/constants.dart';
 import 'package:instagram_clone/screens/home_screen.dart';
+import 'package:instagram_clone/screens/publish_post_screen.dart';
 
 class CustomBottomTab extends StatefulWidget {
   const CustomBottomTab({super.key});
@@ -40,35 +40,35 @@ class _CustomBottomTabState extends State<CustomBottomTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CupertinoTabBar(
-          backgroundColor: bgColor,
-          items: <BottomNavigationBarItem>[
+          backgroundColor: Colors.white,
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
                 icon: Icon(
               Icons.home,
-              color: (selectedIndex == 0) ? primaryColor : secondaryColor,
+              // color: (selectedIndex == 0) ? primaryColor : secondaryColor,
             )),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.search_outlined,
-                color: (selectedIndex == 1) ? primaryColor : secondaryColor,
+                // color: (selectedIndex == 1) ? primaryColor : secondaryColor,
               ),
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.add_circle,
-                color: (selectedIndex == 2) ? primaryColor : secondaryColor,
+                // color: (selectedIndex == 2) ? primaryColor : secondaryColor,
               ),
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.favorite,
-                color: (selectedIndex == 3) ? primaryColor : secondaryColor,
+                // color: (selectedIndex == 3) ? primaryColor : secondaryColor,
               ),
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
-                color: (selectedIndex == 4) ? primaryColor : secondaryColor,
+                // color: (selectedIndex == 4) ? primaryColor : secondaryColor,
               ),
             ),
           ],
@@ -79,10 +79,10 @@ class _CustomBottomTabState extends State<CustomBottomTab> {
         onPageChanged: onPageChanged,
         children: const [
           HomeScreen(),
-          HomeScreen(),
-          HomeScreen(),
-          HomeScreen(),
-          HomeScreen(),
+          Scaffold(),
+          PublishPostScreen(),
+          Scaffold(),
+          Scaffold(),
         ],
       ),
     );
