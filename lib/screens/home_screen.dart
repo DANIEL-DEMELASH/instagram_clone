@@ -21,29 +21,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => userProvider,
-      child: Scaffold(
-        body: Consumer(
-          builder: (context, UserProvider user, child) {
-            switch (user.status) {
-              case Status.intial:
-                return const CircularProgressIndicator.adaptive();
+      child: Consumer(
+        builder: (context, UserProvider user, child) {
+          switch (user.status) {
+            case Status.intial:
+              return const Scaffold(body: CircularProgressIndicator.adaptive());
 
-              case Status.loading:
-                return const CircularProgressIndicator.adaptive();
+            case Status.loading:
+              return const Scaffold(body: CircularProgressIndicator.adaptive());
 
-              case Status.done:
-                return Center(child: Text(user.getUser.name));
+            case Status.done:
+              return Center(child: Text(user.getUser.name));
 
-              case Status.error:
-                return const Center(
-                  child: Text('an error occured'),
-                );
+            case Status.error:
+              return const Center(
+                child: Text('an error occured'),
+              );
 
-              default:
-                return const Text('default');
-            }
-          },
-        ),
+            default:
+              return const Text('default');
+          }
+        },
       ),
     );
   }

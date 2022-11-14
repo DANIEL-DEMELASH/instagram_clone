@@ -11,3 +11,7 @@ const textInputDecoration = InputDecoration(
     ),
   ),
 );
+
+const primaryColor = Colors.white;
+const secondaryColor = Colors.grey;
+const bgColor = Color.fromRGBO(0, 0, 0, 1);
